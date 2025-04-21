@@ -1,6 +1,5 @@
 # WebServerNpp - Notepad++ Web Server Integration 🌐
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/your-username/WebServerNpp/main.yml?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Control a web server directly from Notepad++ using Python scripts. Serve files from your current directory and manage the server via console commands.
