@@ -1,4 +1,4 @@
-# WebServerNpp - Notepad++ Web Server Integration 🌐
+# WebServerNpp - Notepad++ Web Server Integration (python 2.7)🌐
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
