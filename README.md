@@ -61,6 +61,9 @@ Get up and running with WebServerNpp in minutes!
         ```python
         refreshws()
         ```
+        `show_ws_gui()` - GUI interface
+        ```python
+        show_ws_gui()
 
 ## 🛠️ Configuration
 
