@@ -1,4 +1,4 @@
-# WebServerNpp - Notepad++ Web Server Integration (python 3)🌐
+# WebServerNpp - Notepad++ Web Server Integration (python 3 TclTk)🌐
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -21,11 +21,11 @@ Get up and running with WebServerNpp in minutes!
 ### Prerequisites
 
 *   [Notepad++](https://notepad-plus-plus.org/) installed.
-*   [Python Script](https://github.com/bruderstein/PythonScript) plugin installed. (python 3)
+*   [Python Script](https://github.com/bruderstein/PythonScript) plugin installed. (python 3 TclTk)
 
 ### Python Script Plugin Installation
 
-1.  Download the latest release from: [https://github.com/bruderstein/PythonScript/releases](https://github.com/bruderstein/PythonScript/releases/tag/v3.0.22) (python 3)
+1.  Download the latest release from: [https://github.com/bruderstein/PythonScript/releases](https://github.com/bruderstein/PythonScript/releases/tag/v3.0.22) (python 3 TclTk)
 2.  **Manual Installation:**
     *   Extract the `.zip` file.
     *   Copy `PythonScript.dll` to: `Notepad++\plugins\PythonScript`
