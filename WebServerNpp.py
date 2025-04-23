@@ -5,6 +5,9 @@ import webbrowser
 import socket
 import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+import tkinter as tk
+from tkinter import ttk, scrolledtext, messagebox
+from threading import Thread
 
 # Import Notepad++ Python Script modules
 from Npp import notepad, console, MESSAGEBOXFLAGS, STATUSBARSECTION
@@ -24,6 +27,148 @@ server_info = {
 }
 
 # --- Server Functions ---
+
+class TextRedirector:
+    def __init__(self, widget, tag="stdout"):
+        self.widget = widget
+        self.tag = tag
+
+    def write(self, text):
+        self.widget.configure(state='normal')
+        self.widget.insert(tk.END, text, (self.tag,))
+        self.widget.configure(state='disabled')
+        self.widget.see(tk.END)
+
+    def flush(self):
+        pass
+
+class WebServerGUI:
+    def __init__(self, master):
+        self.master = master
+        master.title("Npp Web Server Controller")
+        master.geometry("700x500")
+        
+        self.create_widgets()
+        self.update_status_indicator()
+        self.setup_style()
+        
+        # Redirigir salida de consola
+        sys.stdout = TextRedirector(self.log_area, "stdout")
+        sys.stderr = TextRedirector(self.log_area, "stderr")
+
+    def setup_style(self):
+        style = ttk.Style()
+        style.theme_use('clam')
+        style.configure('TButton', padding=5, font=('Arial', 9))
+        style.configure('Green.TFrame', background='#4CAF50')
+        style.configure('Red.TFrame', background='#F44336')
+        style.configure('Status.TLabel', font=('Arial', 10, 'bold'))
+        style.configure('TLabelFrame', font=('Arial', 10, 'bold'))
+        style.configure('TLabelFrame.Label', font=('Arial', 10))
+
+    def create_widgets(self):
+        # Frame principal
+        main_frame = ttk.Frame(self.master)
+        main_frame.pack(expand=True, fill='both', padx=10, pady=10)
+
+        # Panel de control
+        control_frame = ttk.LabelFrame(main_frame, text="Server Control")
+        control_frame.pack(fill='x', pady=5)
+
+        # Status indicator with label
+        status_frame = ttk.Frame(control_frame)
+        status_frame.grid(row=0, column=0, padx=5, sticky='w')
+        
+        self.status_indicator = ttk.Frame(status_frame, width=20, height=20)
+        self.status_indicator.pack(side='left', padx=(0,5))
+        
+        self.status_label = ttk.Label(status_frame, text="Stopped", font=('Arial', 10))
+        self.status_label.pack(side='left')
+        
+        # Control buttons
+        btn_frame = ttk.Frame(control_frame)
+        btn_frame.grid(row=0, column=1, sticky='e')
+        
+        ttk.Button(btn_frame, text="Start", command=self.start_server).pack(side='left', padx=2)
+        ttk.Button(btn_frame, text="Stop", command=self.stop_server).pack(side='left', padx=2)
+        ttk.Button(btn_frame, text="Restart", command=self.refresh_server).pack(side='left', padx=2)
+        ttk.Button(btn_frame, text="Status", command=self.show_status).pack(side='left', padx=2)
+        ttk.Button(btn_frame, text="Open Browser", command=self.open_browser).pack(side='left', padx=2)
+
+        # Información del servidor
+        info_frame = ttk.LabelFrame(main_frame, text="Server Information")
+        info_frame.pack(fill='x', pady=5)
+
+        self.info_text = scrolledtext.ScrolledText(info_frame, height=4, state='disabled', font=('Consolas', 9))
+        self.info_text.pack(fill='x', padx=5, pady=5)
+
+        # Registro de actividad
+        log_frame = ttk.LabelFrame(main_frame, text="Activity Log")
+        log_frame.pack(expand=True, fill='both', pady=5)
+
+        self.log_area = scrolledtext.ScrolledText(log_frame, wrap=tk.WORD, font=('Consolas', 9))
+        self.log_area.pack(expand=True, fill='both', padx=5, pady=5)
+
+        # Configure tags for colored output
+        self.log_area.tag_config('stdout', foreground='black')
+        self.log_area.tag_config('stderr', foreground='red')
+
+    def update_status_indicator(self):
+        if server_info["is_running"]:
+            self.status_indicator.configure(style='Green.TFrame')
+            self.status_label.config(text=f"Running on port {server_info['port']}")
+        else:
+            self.status_indicator.configure(style='Red.TFrame')
+            self.status_label.config(text="Stopped")
+        
+        self.update_info_panel()
+        self.master.after(1000, self.update_status_indicator)
+
+    def update_info_panel(self):
+        self.info_text.config(state='normal')
+        self.info_text.delete(1.0, tk.END)
+        if server_info["is_running"]:
+            info = f"Port: {server_info['port']}\n"
+            info += f"Directory: {server_info['directory']}\n"
+            info += f"URL: http://localhost:{server_info['port']}"
+            self.info_text.insert(tk.END, info)
+        else:
+            self.info_text.insert(tk.END, "Server is not running")
+        self.info_text.config(state='disabled')
+
+    def start_server(self):
+        Thread(target=start_web_server, daemon=True).start()
+
+    def stop_server(self):
+        Thread(target=stop_web_server, daemon=True).start()
+
+    def refresh_server(self):
+        Thread(target=refresh_web_server, daemon=True).start()
+
+    def show_status(self):
+        if server_info["is_running"]:
+            status_text = (
+                f"Server ACTIVE\n"
+                f"Port: {server_info['port']}\n"
+                f"Directory: {server_info['directory']}\n"
+                f"URL: http://localhost:{server_info['port']}"
+            )
+        else:
+            status_text = "Server INACTIVE"
+        
+        self.info_text.config(state='normal')
+        self.info_text.delete(1.0, tk.END)
+        self.info_text.insert(tk.END, status_text)
+        self.info_text.config(state='disabled')
+        
+        self.log_area.insert(tk.END, "Status checked: " + ("Server is active\n" if server_info["is_running"] else "Server is inactive\n"))
+        self.log_area.see(tk.END)
+
+    def open_browser(self):
+        if server_info["is_running"]:
+            webbrowser.open(f"http://localhost:{server_info['port']}")
+        else:
+            messagebox.showwarning("Server Not Running", "The web server is not currently running")
 
 def find_available_port(start_port, max_attempts):
     """Find an available port starting from start_port."""
@@ -181,11 +326,9 @@ def show_server_status():
             server_info["port"], server_info["directory"]
         )
         console.write("Server status: ACTIVE on port {}\n".format(server_info["port"]))
-        notepad.messageBox(msg, "Web Server Status", MESSAGEBOXFLAGS.ICONINFORMATION)
     else:
         msg = "Server INACTIVE."
         console.write("Server status: INACTIVE\n")
-        notepad.messageBox(msg, "Web Server Status", MESSAGEBOXFLAGS.ICONINFORMATION)
 
 def refresh_web_server():
     """Restart the web server with current active file's directory."""
@@ -195,6 +338,12 @@ def refresh_web_server():
     if server_info["is_running"]:
         stop_web_server()
     start_web_server()
+
+def show_gui():
+    """Show the Tkinter GUI interface"""
+    root = tk.Tk()
+    app = WebServerGUI(root)
+    root.mainloop()
 
 if __name__ == '__main__':
     console.write("--- Executing script directly ---\n")

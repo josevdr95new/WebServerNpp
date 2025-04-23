@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# ====================================================================
-# SECTION TO ADD TO startup.py
-# Enables ws commands: startws(), stopws(), statusws(), refreshws()
-# to control WebServerNpp.py
-# ====================================================================
-
 import sys
 import os
+from threading import Thread
 
 script_dir = os.path.dirname(__file__)
 if script_dir not in sys.path:
@@ -82,9 +77,16 @@ try:
             else:
                 print(">>> Error in refreshws(): {}".format(e))
 
-    print("[WebServerNpp Startup] Console commands ready: startws(), stopws(), statusws(), refreshws()")
+    def show_ws_gui():
+        """Show the web server GUI interface."""
+        if 'console' in globals():
+            console.show()
+            console.write(">>> Launching Web Server GUI...\n")
+        Thread(target=WebServerNpp.show_gui, daemon=True).start()
+
+    print("[WebServerNpp Startup] Console commands ready: startws(), stopws(), statusws(), refreshws(), show_ws_gui()")
     if 'console' in globals():
-        console.write("Web server commands ready: startws(), stopws(), statusws(), refreshws()\n")
+        console.write("Web server commands ready: startws(), stopws(), statusws(), refreshws(), show_ws_gui()\n")
 
 except ImportError as e:
     print("[WebServerNpp Startup] Import error: {}. Ensure WebServerNpp.py exists.".format(e))
@@ -97,6 +99,3 @@ except Exception as e:
     if 'console' in globals():
         console.error("[WebServerNpp Startup] Unexpected initialization error: {}\n".format(e))
         console.error(traceback.format_exc() + "\n")
-
-# --- End of WebServerNpp section ---
-# ====================================================================
