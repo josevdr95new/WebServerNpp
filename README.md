@@ -21,7 +21,7 @@ Get up and running with WebServerNpp in minutes!
 ### Prerequisites
 
 *   [Notepad++](https://notepad-plus-plus.org/) installed.
-*   [Python Script](https://github.com/bruderstein/PythonScript) plugin installed.
+*   [Python Script](https://github.com/bruderstein/PythonScript) plugin installed. (python 2.7)
 
 ### Python Script Plugin Installation
 
