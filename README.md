@@ -25,7 +25,7 @@ Get up and running with WebServerNpp in minutes!
 
 ### Python Script Plugin Installation
 
-1.  Download the latest release from: [https://github.com/bruderstein/PythonScript/releases](https://github.com/bruderstein/PythonScript/releases)
+1.  Download the latest release from: [https://github.com/bruderstein/PythonScript/releases](https://github.com/bruderstein/PythonScript/releases) (python 2.7)
 2.  **Manual Installation:**
     *   Extract the `.zip` file.
     *   Copy `PythonScript.dll` to: `Notepad++\plugins\PythonScript`
