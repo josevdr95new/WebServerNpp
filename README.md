@@ -1,6 +1,5 @@
-# WebServerNpp - Notepad++ Web Server Integration 🌐
+# WebServerNpp - Notepad++ Web Server Integration (python 3)🌐
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/your-username/WebServerNpp/main.yml?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Control a web server directly from Notepad++ using Python scripts. Serve files from your current directory and manage the server via console commands.
@@ -22,11 +21,11 @@ Get up and running with WebServerNpp in minutes!
 ### Prerequisites
 
 *   [Notepad++](https://notepad-plus-plus.org/) installed.
-*   [Python Script](https://github.com/bruderstein/PythonScript) plugin installed.
+*   [Python Script](https://github.com/bruderstein/PythonScript) plugin installed. (python 3)
 
 ### Python Script Plugin Installation
 
-1.  Download the latest release from: [https://github.com/bruderstein/PythonScript/releases](https://github.com/bruderstein/PythonScript/releases)
+1.  Download the latest release from: [https://github.com/bruderstein/PythonScript/releases](https://github.com/bruderstein/PythonScript/releases/tag/v3.0.22) (python 3)
 2.  **Manual Installation:**
     *   Extract the `.zip` file.
     *   Copy `PythonScript.dll` to: `Notepad++\plugins\PythonScript`
