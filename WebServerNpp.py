@@ -4,8 +4,7 @@ import sys
 import webbrowser
 import socket
 import threading
-from BaseHTTPServer import HTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 # Import Notepad++ Python Script modules
 from Npp import notepad, console, MESSAGEBOXFLAGS, STATUSBARSECTION
